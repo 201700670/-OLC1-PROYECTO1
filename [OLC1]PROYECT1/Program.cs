@@ -17,7 +17,7 @@ namespace _OLC1_PROYECT1
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-            Console.WriteLine("hola");
+            Console.WriteLine("hola i");
         }
     }
 }
