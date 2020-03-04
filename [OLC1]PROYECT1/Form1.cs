@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using _OLC1_PROYECT1.AnalizadorTexto;
 
 namespace _OLC1_PROYECT1
 {
@@ -135,6 +136,15 @@ namespace _OLC1_PROYECT1
                     }
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("***************INTERPRETA TXT************");
+            String texto = textBox1.Text;
+            _OLC1_PROYECT1.AnalizadorTexto.AnalizadorTexto lex = new AnalizadorTexto.AnalizadorTexto();
+            lex.escanear(texto);
+            lex.imprimirLista(lex.salida);
         }
     }
 }
