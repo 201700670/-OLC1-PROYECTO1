@@ -21,6 +21,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
         string inicioconj, finconj, identificador;
         int contador = 0;
         bool bandera = false, flagcad = false;
+        int viendosiesconjunto=0;
         //public LinkedList<PilaExpresion> Pila;// este me sirve para cuardar el identificador y la pila de las expresiones
         //public LinkedList<DatoExpresion> Expresion;//este me sirve para guardar en pila las expresiones regulares con su tipo
         public static LinkedList<String> CadenasExpresion;// este solo me sirve para capturar las cadenas dentro de una expresion y verificar si existen
@@ -79,6 +80,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                         }
                         else if (c.Equals(">"))
                         {
+
                             auxLex += c;
                             addToken(Tipo.MAYOR, auxLex, fila, columna);
                             auxLex = "";
@@ -153,6 +155,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                         }
                         else if (c.Equals("-"))
                         {
+                            
                             identificador = auxLex;
                             addToken(Tipo.IDENTIFICADOR, auxLex, fila, columna);
                             auxLex += c;
@@ -163,6 +166,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                         }
                         else if (c.Equals(":"))
                         {
+                            
                             addToken(Tipo.IDENTIFICADOR, auxLex, fila, columna);
                             auxLex += c;
                             addToken(Tipo.DOSPUNTOS, auxLex, fila, columna);
@@ -186,6 +190,572 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             }
                         }
                         break;
+                    case 1:
+                        //*******************************ESTE ES PARA HACER EL RECONOCIMIENTO DE LOS CONJUNTOS Y SUS IDENTIFICADORES.*************************
+                        if (c.Equals(":"))
+                        {
+                            if (auxLex.Equals("CONJ"))
+                            {
+                                addToken(Tipo.RESERVADA, auxLex, fila, columna);
+                            }
+                            auxLex += c;
+                            addToken(Tipo.DOSPUNTOS, auxLex, fila, columna);
+                            auxLex = "";
+                            estado = 1;
+                        }
+                        else if (char.IsLetter(d))
+                        {
+                            viendosiesconjunto = 0;
+                            auxLex += c;
+                            estado = 1;
+                        }
+                        else if (char.IsDigit(d))
+                        {
+                            viendosiesconjunto = 0;
+                            auxLex += c;
+                            estado = 1;
+                        }
+                        else if (c.Equals("-"))
+                        {
+                            if (auxLex.Equals(""))
+                            {
+                                MacroConjuntos += auxLex;
+                                MacroConjuntos += c;
+                                estado = 1;
+                            }
+                            else
+                            {
+                                identificador = auxLex;
+                                addToken(Tipo.IDENTIFICADOR, auxLex, fila, columna);
+                                auxLex += c;
+                                addToken(Tipo.MENOS, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 1;
+                            }
+                        }
+                        else if (c.Equals(">"))
+                        {
+                            if (viendosiesconjunto == 0)
+                            {
+                                auxLex += c;
+                                addToken(Tipo.MAYOR, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 1;
+                                viendosiesconjunto = 1;
+                            }
+                            else
+                            {
+                                MacroConjuntos += auxLex;
+                                auxLex += c;
+                                MacroConjuntos += c;
+                                estado = 1;
+                            }
+
+                        }
+                        else if (c.Equals(" "))
+                        {
+                            columna += 1;
+                            estado = 1;
+                        }
+                        else if (c.Equals("~"))
+                        {
+                            if (!auxLex.Equals(""))
+                            {
+                                inicioconj = auxLex;
+                                addToken(Tipo.CONJUNTOINICIO, auxLex, fila, columna);
+                            }
+                            auxLex += c;
+                            addToken(Tipo.VIRGULILLA, auxLex, fila, columna);
+                            auxLex = "";
+                            estado = 1;
+                        }
+                        else if (c.Equals(","))
+                        {
+                            contador++;
+                            if (contador == 1)
+                            {
+                                inicioconj = auxLex;
+                                contador = 0;
+                            }
+                            if (!auxLex.Equals(""))
+                            {
+                                MacroConjuntos += auxLex;
+                                addToken(Tipo.CONJUNTO, auxLex, fila, columna);
+                            }
+                            auxLex += c;
+                            MacroConjuntos += c;
+                            addToken(Tipo.COMA, auxLex, fila, columna);
+                            auxLex = "";
+                            bandera = true;
+                            estado = 1;
+                        }
+                        else if (c.Equals(";"))
+                        {
+                            viendosiesconjunto = 0;
+                            finconj = auxLex;
+                            if (bandera)
+                            {
+                                MacroConjuntos += auxLex;
+
+                            }
+                            if (!auxLex.Equals(""))
+                            {
+                                addToken(Tipo.CONJUNTOFINAL, auxLex, fila, columna);
+                                auxLex += c;
+                                addToken(Tipo.PUNTOYCOMA, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 1;
+                            }
+                            else
+                            {
+                                auxLex += c;
+                                addToken(Tipo.PUNTOYCOMA, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 1;
+                            }
+                            if (bandera)
+                            {
+                                Console.WriteLine("---------------------------------------------------------->    " + identificador + "   " + MacroConjuntos);
+                                //L_Conjuntos.add(new Conjuntos(identificador, MacroConjuntos));
+                                MacroConjuntos = "";
+                                identificador = "";
+                                bandera = false;
+                            }
+                            else
+                            {
+                                Console.WriteLine("---------------------------------------------------------->    " + identificador + "   " + inicioconj+"   "+ finconj);
+                                
+                                if (esMinuscula(inicioconj) == esMinuscula(finconj))
+                                {
+
+                                    //L_Conjuntos.add(new Conjuntos(identificador, inicioconj, finconj));
+                                }
+                                else if (esMayuscula(inicioconj) == esMinuscula(finconj))
+                                {
+                                    //L_Conjuntos.add(new Conjuntos(identificador, inicioconj, finconj));
+                                }
+                                else if (esNumero(inicioconj) == esNumero(finconj))
+                                {
+                                    //L_Conjuntos.add(new Conjuntos(identificador, inicioconj, finconj));
+                                }
+                                else
+                                {
+                                    addError(Tipo.DESCONOCIDO, auxLex, "Caracter no definido", fila, columna);
+                                }
+                            }
+                            identificador = "";
+                            MacroConjuntos = "";
+                            break;
+                        }
+                        else if (c.Equals("\n"))
+                        {
+                            if (viendosiesconjunto == 1)
+                            {
+                                MacroConjuntos += auxLex;
+                                auxLex += c;
+                                addToken(Tipo.CONJUNTO, auxLex, fila, columna);
+                                MacroConjuntos += c;
+                                auxLex = "";
+                                estado = 1;
+                            }
+                            else
+                            {
+                                columna = 0;
+                                fila += 1;
+                                estado = 0;
+                                auxLex = "";
+                                break;
+                            }
+                            
+                        }
+                        else if (c.Equals("\t") || c.Equals("\r"))
+                        {
+                            if (viendosiesconjunto == 1)
+                            {
+                                MacroConjuntos += auxLex;
+                                auxLex +=  c;
+                                addToken(Tipo.CONJUNTO, auxLex, fila, columna);
+                                MacroConjuntos += c;
+                                auxLex="";
+                                estado = 1;
+                            }
+                            else
+                            {
+                                fila += 1;
+                                estado = 1;
+                                auxLex = "";
+                            }
+                        }
+                        else if (c.Equals("/"))
+                        {
+                            if (viendosiesconjunto == 1)
+                            {
+                                MacroConjuntos += auxLex;
+                                auxLex += c;
+                                MacroConjuntos += c;
+                                estado = 1;
+                            }
+                            else
+                            {
+                                auxLex += c;
+                                addToken(Tipo.DIVISION, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 0;
+                            }
+
+                        }
+                        else if (c.Equals("<"))
+                        {
+                            if (viendosiesconjunto == 1)
+                            {
+                                MacroConjuntos += auxLex;
+                                auxLex += c;
+                                MacroConjuntos += c;
+                                estado = 1;
+                            }
+                            else
+                            {
+                                auxLex += c;
+                                addToken(Tipo.MENOR, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 0;
+                            }
+
+                        }
+                        else
+                        {
+                            if (char.Parse(c) <= 125 && char.Parse(c) >= 32 && char.Parse(c) != 34)
+                            {
+                                auxLex += c;
+                                estado = 1;
+                            }
+                            else
+                            {
+                                auxLex += c;
+                                addError(Tipo.DESCONOCIDO, auxLex, "Caracter no definido", fila, columna);
+                                Console.WriteLine("ERROR LEXICO1 CON: " + auxLex + " " + fila + "," + columna);
+                                auxLex = "";
+                                estado = 1;
+                            }
+                        }
+                        break;
+
+                    case 2:
+                        //9****************************************ESTEE CONTENDRA LOS IDENTIFICADORES Y LAS EXPRESIONES REGULARES****************************
+                        if (c.Equals(">"))
+                        {
+
+                            if (flagcad)
+                            {
+                                auxLex += "\\" + c;
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 2;
+                            }
+                            else
+                            {
+                                //Expresion = new LinkedList<>();
+                                auxLex += c;
+                                addToken(Tipo.MAYOR, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 2;
+                            }
+                        }
+                        else if (c.Equals(" "))
+                        {
+                            columna += 1;
+                            estado = 2;
+                        }
+                        else if (c.Equals("."))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+
+                            }
+                            else
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "punto" + punto));
+
+                                punto++;
+                                addToken(Tipo.CONCATENACION, auxLex, fila, columna);
+                                auxLex = "";
+                            }
+                            estado = 2;
+                        }
+                        else if (c.Equals("|"))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+
+                            }
+                            else
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "or" + disyuncion));
+
+                                disyuncion++;
+                                addToken(Tipo.OR, auxLex, fila, columna);
+                                auxLex = "";
+                            }
+                            estado = 2;
+                        }
+                        else if (c.Equals("+"))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.SUMA, auxLex, fila, columna);
+                                flagcad = false;
+
+                            }
+                            else
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "mas" + suma));
+
+                                suma++;
+                                addToken(Tipo.SUMA, auxLex, fila, columna);
+                                auxLex = "";
+                            }
+                            estado = 2;
+                        }
+                        else if (c.Equals("*"))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+
+                            }
+                            else
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "multi" + multiplicacion));
+
+                                multiplicacion++;
+                                addToken(Tipo.MULTIPLICACION, auxLex, fila, columna);
+                                auxLex = "";
+                            }
+                            estado = 2;
+                        }
+                        else if (c.Equals("?"))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+
+                            }
+                            else
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "interrrogacion" + interrogacion));
+
+                                interrogacion++;
+                                addToken(Tipo.INTERROGACION, auxLex, fila, columna);
+                                auxLex = "";
+                            }
+                            estado = 2;
+                        }
+                        else if (char.IsLetter(d))
+                        {
+                            auxLex += c;
+                            estado = 2;
+                        }
+                        else if (char.IsDigit(d))
+                        {
+                            auxLex += c;
+                            estado = 2;
+                        }
+                        else if (c.Equals("\""))
+                        {
+
+                            contador++;
+                            flagcad = true;
+                            if (contador == 2 && !auxLex.Equals(""))
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                contador = 0;
+                            }
+                            if (contador == 2)
+                            {
+                                flagcad = false;
+                                contador = 0;
+                            }
+                            auxLex += c;
+                            addToken(Tipo.COMILLA, auxLex, fila, columna);
+                            auxLex = "";
+                            estado = 2;
+                        }
+                        else if (c.Equals("{"))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 2;
+
+                            }
+                            else
+                            {
+                                addToken(Tipo.LLAVEIZQ, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 2;
+                            }
+                        }
+                        else if (c.Equals("}"))
+                        {
+                            if (flagcad)
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 2;
+
+                            }
+                            else
+                            {
+                                finconj = auxLex;
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CONJUNTOS, auxLex + i));
+                                addToken(Tipo.IDENTIFICADOR, auxLex, fila, columna);
+                                auxLex += c;
+                                addToken(Tipo.LLAVEDER, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 2;
+                                break;
+                            }
+                        }
+                        else if (c.Equals(";"))
+                        {
+                            if (flagcad)
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 2;
+
+                            }
+                            else
+                            {
+                                punto = 1;
+                                suma = 0;
+                                multiplicacion = 0;
+                                interrogacion = 0;
+                                disyuncion = 0;
+                                //Pila.add(new PilaExpresion(Expresion, identificador));
+                                auxLex += c;
+                                addToken(Tipo.PUNTOYCOMA, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 0;
+                                break;
+                            }
+                        }
+                        else if (c.Equals("\n"))
+                        {
+                            columna = 0;
+                            fila += 1;
+                            estado = 0;
+                            auxLex = "";
+                            break;
+                        }
+                        else if (c.Equals("\t") || c.Equals("\r"))
+                        {
+                            fila += 1;
+                            estado = 2;
+                            auxLex = "";
+                        }
+                        else if (c.Equals("/"))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 2;
+
+                            }
+                            else
+                            {
+                                addToken(Tipo.DIVISION, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 0;
+                            }
+                        }
+                        else if (c.Equals("<"))
+                        {
+                            if (flagcad)
+                            {
+                                auxLex += "\\" + c;
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 2;
+
+                            }
+                            else
+                            {
+                                auxLex += c;
+                                addToken(Tipo.MENOR, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 0;
+                            }
+                        }
+                        else
+                        {
+                            if (char.Parse(c) <= 125 && char.Parse(c) >= 32 && char.Parse(c) != 34)
+                            {
+                                auxLex += c;
+                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 2;
+                            }
+                            else
+                            {
+                                auxLex += c;
+                                addError(Tipo.DESCONOCIDO, auxLex, "Caracter no definido", fila, columna);
+                                Console.WriteLine("ERROR LEXICO4 CON: " + auxLex + " " + fila + "," + columna);
+                                auxLex = "";
+                                estado = 0;
+                            }
+                        }
+                        break;
+
                 }
             }
 
@@ -224,6 +794,35 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                 
             }
 
+        }
+        public static bool esMinuscula(String s)
+        {
+            // Regresa el resultado de comparar la original con sun versión minúscula
+            return s.Equals(s.ToLower());
+        }
+
+        public static bool esMayuscula(String s)
+        {
+            // Regresa el resultado de comparar la original con sun versión mayúscula
+            return s.Equals(s.ToUpper());
+        }
+
+        public static bool esNumero(String cadena)
+        {
+
+            bool resultado;
+
+            try
+            {
+                int.Parse(cadena);
+                resultado = true;
+            }
+            catch (NotFiniteNumberException excepcion)
+            {
+                resultado = false;
+            }
+
+            return resultado;
         }
     }
 
