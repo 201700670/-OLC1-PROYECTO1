@@ -35,6 +35,8 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
             ADMIRACION,
             LLAVEDER,
             LLAVEIZQ,
+            CORCHETEDER,
+            CORCHETEIZQ,
             INTERROGACION,
             VIRGULILLA,
             CADENA,
@@ -163,6 +165,10 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                     return "LLave derecha";
                 case Tipo.LLAVEIZQ:
                     return "LLave izquierda";
+                case Tipo.CORCHETEDER:
+                    return "Corchete derecha";
+                case Tipo.CORCHETEIZQ:
+                    return "Corchete izquierda";
                 case Tipo.INTERROGACION:
                     return "0 o una vez";
                 case Tipo.CONCATENACION:

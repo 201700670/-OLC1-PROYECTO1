@@ -21,7 +21,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
         string inicioconj, finconj, identificador;
         int contador = 0;
         bool bandera = false, flagcad = false;
-        int viendosiesconjunto=0;
+        int viendosiesconjunto=0, todosentrecorchetes=0;
         //public LinkedList<PilaExpresion> Pila;// este me sirve para cuardar el identificador y la pila de las expresiones
         //public LinkedList<DatoExpresion> Expresion;//este me sirve para guardar en pila las expresiones regulares con su tipo
         public static LinkedList<String> CadenasExpresion;// este solo me sirve para capturar las cadenas dentro de una expresion y verificar si existen
@@ -171,7 +171,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             auxLex += c;
                             addToken(Tipo.DOSPUNTOS, auxLex, fila, columna);
                             auxLex = "";
-                            estado = 0;
+                            estado = 3;
                         }
                         else
                         {
@@ -444,7 +444,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                         //9****************************************ESTEE CONTENDRA LOS IDENTIFICADORES Y LAS EXPRESIONES REGULARES****************************
                         if (c.Equals(">"))
                         {
-
+                            viendosiesconjunto = 0;
                             if (flagcad)
                             {
                                 auxLex += "\\" + c;
@@ -462,12 +462,22 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                                 addToken(Tipo.MAYOR, auxLex, fila, columna);
                                 auxLex = "";
                                 estado = 2;
+                                viendosiesconjunto = 1;
                             }
                         }
                         else if (c.Equals(" "))
                         {
-                            columna += 1;
-                            estado = 2;
+                            if (todosentrecorchetes == 2)
+                            {
+                                auxLex += c;
+                                estado = 2;
+                                columna += 1;
+                            }
+                            else
+                            {
+                                columna += 1;
+                                estado = 2;
+                            }
                         }
                         else if (c.Equals("."))
                         {
@@ -653,14 +663,36 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                         }
                         else if (c.Equals(";"))
                         {
+                            viendosiesconjunto = 0;
                             if (flagcad)
                             {
                                 //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
-                                //CadenasExpresion.add(auxLex);
-                                addToken(Tipo.CADENA, auxLex, fila, columna);
-                                flagcad = false;
-                                auxLex = "";
-                                estado = 2;
+                                //CadenasExpresion.add(auxLex);9
+                                if (auxLex.Equals("\\n")|| auxLex.Equals("\\t")|| auxLex.Equals("\\r") || auxLex.Equals("\\'") || auxLex.Equals("\\\""))
+                                {
+                                    addToken(Tipo.MAYOR, auxLex, fila, columna);
+                                    auxLex += c;
+                                    addToken(Tipo.DOSPUNTOS, auxLex, fila, columna);
+                                    estado = 2;
+                                    auxLex = "";
+                                }
+                                else if (auxLex.Equals(" \\n") || auxLex.Equals(" \\t") || auxLex.Equals(" \\r") || auxLex.Equals(" \\'") || auxLex.Equals(" \\\""))
+                                {
+                                    addToken(Tipo.SALTO_DE_LINEA, auxLex, fila, columna);
+                                    auxLex += c;
+                                    addToken(Tipo.DOSPUNTOS, auxLex, fila, columna);
+                                    estado = 2;
+                                    auxLex = "";
+                                }
+                                else
+                                {
+
+                                    auxLex = c;
+                                    addToken(Tipo.DOSPUNTOS, auxLex, fila, columna);
+                                    flagcad = false;
+                                    auxLex = "";
+                                    estado = 2;
+                                }
 
                             }
                             else
@@ -678,19 +710,45 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                                 break;
                             }
                         }
+                        else if (c.Equals("\\"))
+                        {
+                            auxLex += c;
+                            flagcad = true;
+                            estado = 2;
+                        }
                         else if (c.Equals("\n"))
                         {
-                            columna = 0;
-                            fila += 1;
-                            estado = 0;
-                            auxLex = "";
-                            break;
+                            if (viendosiesconjunto == 1)
+                            {
+                                auxLex += c;
+                                addToken(Tipo.SALTO_DE_LINEA, auxLex, fila, columna);
+                                estado = 2;
+                                auxLex = "";
+                            }
+                            else
+                            {
+                                columna = 0;
+                                fila += 1;
+                                estado = 0;
+                                auxLex = "";
+                                break;
+                            }
                         }
                         else if (c.Equals("\t") || c.Equals("\r"))
                         {
-                            fila += 1;
-                            estado = 2;
-                            auxLex = "";
+                            if (viendosiesconjunto == 1)
+                            {
+                                auxLex += c;
+                                addToken(Tipo.SALTO_DE_LINEA, auxLex, fila, columna);
+                                estado = 2;
+                                auxLex = "";
+                            }
+                            else
+                            {
+                                fila += 1;
+                                estado = 2;
+                                auxLex = "";
+                            }
                         }
                         else if (c.Equals("/"))
                         {
@@ -733,6 +791,47 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                                 estado = 0;
                             }
                         }
+                        else if (c.Equals("["))
+                        {
+                            todosentrecorchetes++;
+                            auxLex += c;
+                            addToken(Tipo.CORCHETEIZQ, auxLex, fila, columna);
+                            auxLex = "";
+                            estado = 2;
+                        }
+                        else if (c.Equals(":"))
+                        {
+                            if (todosentrecorchetes == 1)
+                            {
+                                auxLex += c;
+                                addToken(Tipo.CORCHETEIZQ, auxLex, fila, columna);
+                                auxLex = "";
+                                todosentrecorchetes++;
+                                estado = 2;
+                            }
+                            else if (todosentrecorchetes == 2)
+                            {
+                                todosentrecorchetes = 0;
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                auxLex += c;
+                                addToken(Tipo.DOSPUNTOS, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 2;
+                            }
+                            else
+                            {
+                                auxLex += c;
+                                estado = 2;
+                            }
+                        }
+                        else if (c.Equals("]"))
+                        {
+                            todosentrecorchetes = 0;
+                            auxLex += c;
+                            addToken(Tipo.CORCHETEDER, auxLex, fila, columna);
+                            auxLex = "";
+                            estado = 2;
+                        }
                         else
                         {
                             if (char.Parse(c) <= 125 && char.Parse(c) >= 32 && char.Parse(c) != 34)
@@ -749,9 +848,168 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             {
                                 auxLex += c;
                                 addError(Tipo.DESCONOCIDO, auxLex, "Caracter no definido", fila, columna);
-                                Console.WriteLine("ERROR LEXICO4 CON: " + auxLex + " " + fila + "," + columna);
+                                Console.WriteLine("ERROR LEXICO2 CON: " + auxLex + " " + fila + "," + columna);
                                 auxLex = "";
                                 estado = 0;
+                            }
+                        }
+                        break;
+                    case 3:
+                        //********************************************************ESTE ESTADO SIRVE PARA LOS LEXEMAS******************************************
+                        if (c.Equals(":"))
+                        {
+                            if (flagcad)
+                            {
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 3;
+
+                            }
+                            else
+                            {
+                                addToken(Tipo.IDENTIFICADOR, auxLex, fila, columna);
+                                auxLex += c;
+                                addToken(Tipo.DOSPUNTOS, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 3;
+                            }
+                        }
+                        else if (char.IsLetter(d))
+                        {
+                            auxLex += c;
+                            estado = 3;
+                        }
+                        else if (char.IsDigit(d))
+                        {
+                            auxLex += c;
+                            estado = 3;
+                        }
+                        else if (c.Equals("\""))
+                        {
+                            contador++;
+                            flagcad = true;
+                            if (contador == 2 && !auxLex.Equals(""))
+                            {
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                contador = 0;
+                            }
+                            if (contador == 2)
+                            {
+                                flagcad = false;
+                                contador = 0;
+                            }
+                            auxLex += c;
+                            addToken(Tipo.COMILLA, auxLex, fila, columna);
+                            auxLex = "";
+                            estado = 3;
+                        }
+                        else if (c.Equals(" "))
+                        {
+                            columna += 1;
+                            estado = 3;
+                        }
+                        else if (c.Equals("\n"))
+                        {
+                            if (flagcad)
+                            {
+                                auxLex += c;
+                                estado = 3;
+                            }
+                            else
+                            {
+                                columna = 0;
+                                fila += 1;
+                                estado = 3;
+                                auxLex = "";
+                                break;
+                            }
+                        }
+                        else if (c.Equals("\t") || c.Equals("\r"))
+                        {
+                            if (flagcad)
+                            {
+                                auxLex += c;
+                                estado = 3;
+                            }
+                            else
+                            {
+                                fila += 1;
+                                estado = 3;
+                                auxLex = "";
+                            }
+                        }
+                        else if (c.Equals("/"))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 3;
+
+                            }
+                            else
+                            {
+                                addToken(Tipo.DIVISION, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 0;
+                            }
+                        }
+                        else if (c.Equals("<"))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 3;
+
+                            }
+                            else
+                            {
+                                addToken(Tipo.MENOR, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 0;
+                            }
+                        }
+                        else if (c.Equals(";"))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 3;
+
+                            }
+                            else
+                            {
+                                addToken(Tipo.PUNTOYCOMA, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 3;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            //System.out.println("NUMERO DE CARACTER "+entrada.codePointAt(i) +"  NOMBRE DE CHAR  "+d+"  ");
+                            if (char.Parse(c) <= 125 && char.Parse(c) >= 32 && char.Parse(c) != 34)
+                            {
+                                auxLex += c;
+                                estado = 3;
+                            }
+                            else
+                            {
+                                auxLex += c;
+                                addError(Tipo.DESCONOCIDO, auxLex, "Caracter no definido", fila, columna);
+                                Console.WriteLine("ERROR LEXICO4 CON: " + auxLex + " " + fila + "," + columna);
+                                auxLex = "";
+                                estado =3 ;
                             }
                         }
                         break;
