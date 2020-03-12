@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static _OLC1_PROYECT1.AnalizadorTexto.Token;
+using _OLC1_PROYECT1.Listas;
 
 namespace _OLC1_PROYECT1.AnalizadorTexto
 {
@@ -22,9 +23,9 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
         int contador = 0;
         bool bandera = false, flagcad = false;
         int viendosiesconjunto=0, todosentrecorchetes=0;
-        //public LinkedList<PilaExpresion> Pila;// este me sirve para cuardar el identificador y la pila de las expresiones
-        //public LinkedList<DatoExpresion> Expresion;//este me sirve para guardar en pila las expresiones regulares con su tipo
-        public static LinkedList<String> CadenasExpresion;// este solo me sirve para capturar las cadenas dentro de una expresion y verificar si existen
+        public LinkedList<PilaExpresion> Pila;// este me sirve para cuardar el identificador y la pila de las expresiones
+        public LinkedList<DatoExpresion> Expresion;//este me sirve para guardar en pila las expresiones regulares con su tipo
+        //public static LinkedList<String> CadenasExpresion;// este solo me sirve para capturar las cadenas dentro de una expresion y verificar si existen
 
 
         public LinkedList<Token> escanear(String entrada)
@@ -33,8 +34,8 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
             salida = new LinkedList<Token>();
             errores = new LinkedList<Token>();
             //L_Conjuntos = new LinkedList<Conjuntos>();
-            //Pila = new LinkedList<>();
-            CadenasExpresion = new LinkedList<String>();
+            Pila = new LinkedList<PilaExpresion>();
+            ///CadenasExpresion = new LinkedList<String>();
             estado = 0;
             columna = 0;
             fila = 1;
@@ -448,7 +449,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             if (flagcad)
                             {
                                 auxLex += "\\" + c;
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -457,7 +458,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             }
                             else
                             {
-                                //Expresion = new LinkedList<>();
+                                Expresion = new LinkedList<DatoExpresion>();
                                 auxLex += c;
                                 addToken(Tipo.MAYOR, auxLex, fila, columna);
                                 auxLex = "";
@@ -484,7 +485,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             auxLex += c;
                             if (flagcad)
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -492,7 +493,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             }
                             else
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "punto" + punto));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "punto" + punto));
 
                                 punto++;
                                 addToken(Tipo.CONCATENACION, auxLex, fila, columna);
@@ -505,7 +506,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             auxLex += c;
                             if (flagcad)
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -513,7 +514,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             }
                             else
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "or" + disyuncion));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "or" + disyuncion));
 
                                 disyuncion++;
                                 addToken(Tipo.OR, auxLex, fila, columna);
@@ -526,7 +527,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             auxLex += c;
                             if (flagcad)
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.SUMA, auxLex, fila, columna);
                                 flagcad = false;
@@ -534,7 +535,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             }
                             else
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "mas" + suma));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "mas" + suma));
 
                                 suma++;
                                 addToken(Tipo.SUMA, auxLex, fila, columna);
@@ -547,7 +548,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             auxLex += c;
                             if (flagcad)
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -555,7 +556,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             }
                             else
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "multi" + multiplicacion));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "multi" + multiplicacion));
 
                                 multiplicacion++;
                                 addToken(Tipo.MULTIPLICACION, auxLex, fila, columna);
@@ -568,7 +569,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             auxLex += c;
                             if (flagcad)
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -576,7 +577,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             }
                             else
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "interrrogacion" + interrogacion));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.OPERADOR, "interrrogacion" + interrogacion));
 
                                 interrogacion++;
                                 addToken(Tipo.INTERROGACION, auxLex, fila, columna);
@@ -601,7 +602,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             flagcad = true;
                             if (contador == 2 && !auxLex.Equals(""))
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -622,7 +623,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             auxLex += c;
                             if (flagcad)
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -641,7 +642,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                         {
                             if (flagcad)
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -652,7 +653,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             else
                             {
                                 finconj = auxLex;
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CONJUNTOS, auxLex + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CONJUNTOS, auxLex + i));
                                 addToken(Tipo.IDENTIFICADOR, auxLex, fila, columna);
                                 auxLex += c;
                                 addToken(Tipo.LLAVEDER, auxLex, fila, columna);
@@ -666,7 +667,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             viendosiesconjunto = 0;
                             if (flagcad)
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);9
                                 if (auxLex.Equals("\\n")|| auxLex.Equals("\\t")|| auxLex.Equals("\\r") || auxLex.Equals("\\'") || auxLex.Equals("\\\""))
                                 {
@@ -702,7 +703,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                                 multiplicacion = 0;
                                 interrogacion = 0;
                                 disyuncion = 0;
-                                //Pila.add(new PilaExpresion(Expresion, identificador));
+                                Pila.AddLast(new PilaExpresion(Expresion, identificador));
                                 auxLex += c;
                                 addToken(Tipo.PUNTOYCOMA, auxLex, fila, columna);
                                 auxLex = "";
@@ -755,7 +756,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             auxLex += c;
                             if (flagcad)
                             {
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -775,7 +776,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             if (flagcad)
                             {
                                 auxLex += "\\" + c;
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;
@@ -837,7 +838,8 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             if (char.Parse(c) <= 125 && char.Parse(c) >= 32 && char.Parse(c) != 34)
                             {
                                 auxLex += c;
-                                //Expresion.add(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                Expresion.AddLast
+                                    (new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
                                 //CadenasExpresion.add(auxLex);
                                 addToken(Tipo.CADENA, auxLex, fila, columna);
                                 flagcad = false;

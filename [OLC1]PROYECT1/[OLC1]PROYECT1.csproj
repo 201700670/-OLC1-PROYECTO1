@@ -63,12 +63,18 @@
   <ItemGroup>
     <Compile Include="AnalizadorTexto\AnalizadorTexto.cs" />
     <Compile Include="AnalizadorTexto\Token.cs" />
+    <Compile Include="CreandoArbol\Estado.cs" />
+    <Compile Include="CreandoArbol\Thompson.cs" />
+    <Compile Include="CreandoArbol\Trancisiones.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Listas\DatoExpresion.cs" />
+    <Compile Include="Listas\Nodo.cs" />
+    <Compile Include="Listas\PilaExpresion.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
