@@ -12,6 +12,8 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
     {
         public LinkedList<Token> salida;
         public LinkedList<Token> errores;
+        public static String EPSILON = "ε";
+        public static char EPSILON_CHAR = Convert.ToChar(EPSILON);
         //public static LinkedList<Conjuntos> L_Conjuntos;
         public String MacroConjuntos = "";
         private int estado;

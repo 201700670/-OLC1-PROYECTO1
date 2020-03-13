@@ -12,7 +12,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
         //atributos
 
         //identificador del estado
-        private String id;
+        private int id;
         //transiciones del estado
         private LinkedList<Trancisiones> transiciones = new LinkedList<Trancisiones>();
 
@@ -21,7 +21,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
          * @param id identificador
          * @param transiciones transiciones
          */
-        public Estado(String id, LinkedList<Trancisiones> transiciones)
+        public Estado(int id, LinkedList<Trancisiones> transiciones)
         {
             this.id = id;
             this.transiciones = transiciones;
@@ -30,7 +30,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
          * Constructor de un estado con solo el identificador
          * @param identificador identificador
          */
-        public Estado(String identificador)
+        public Estado(int identificador)
         {
             this.id = identificador;
 
@@ -40,7 +40,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
          * Accesor del atributo identificador
          * @return id
          */
-        public String getId()
+        public int getId()
         {
             return id;
         }
@@ -48,7 +48,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
          * Mutador del atributo identificador
          * @param id identificador
          */
-        public void setId(String id)
+        public void setId(int id)
         {
             this.id = id;
         }

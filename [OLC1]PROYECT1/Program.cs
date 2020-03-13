@@ -22,14 +22,15 @@ namespace _OLC1_PROYECT1
             ///er1 -> . {letra} *|{letra} |  {digito} "_";
             Thompson a = new Thompson();
             LinkedList<DatoExpresion> n = new LinkedList<DatoExpresion>();
-            n.AddLast(new DatoExpresion(".", DatoExpresion.TipoExpresion.OPERADOR, "punto" + 1));
+            n.AddLast(new DatoExpresion("*", DatoExpresion.TipoExpresion.OPERADOR, "punto" + 1));
             n.AddLast(new DatoExpresion("letra", DatoExpresion.TipoExpresion.CONJUNTOS, "letra" + 1));
-            n.AddLast(new DatoExpresion("*", DatoExpresion.TipoExpresion.OPERADOR, "asterisco" + 1));
+            //n.AddLast(new DatoExpresion("digito", DatoExpresion.TipoExpresion.CONJUNTOS, "digito" + 1));
+            /*n.AddLast(new DatoExpresion("*", DatoExpresion.TipoExpresion.OPERADOR, "asterisco" + 1));
             n.AddLast(new DatoExpresion("|", DatoExpresion.TipoExpresion.OPERADOR, "or" + 1));
             n.AddLast(new DatoExpresion("letra", DatoExpresion.TipoExpresion.CONJUNTOS, "letra" + 2));
             n.AddLast(new DatoExpresion("|", DatoExpresion.TipoExpresion.OPERADOR, "or" + 2));
             n.AddLast(new DatoExpresion("digito", DatoExpresion.TipoExpresion.CONJUNTOS, "digito" + 1));
-            n.AddLast(new DatoExpresion("_", DatoExpresion.TipoExpresion.CADENA, "cad" + 1));
+            n.AddLast(new DatoExpresion("_", DatoExpresion.TipoExpresion.CADENA, "cad" + 1));*/
             a.Analizarentrada(n);
 
         }
