@@ -90,7 +90,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
         }
         public String DOT_String()
         {
-            return (this.inicio.getId() + " -> " + this.fin.getId() + " [label=\"" + this.simbolo + "\"];");
+            return ("S"+this.inicio.getId() + " -> S" + this.fin.getId() + " [label=\"" + this.simbolo + "\"];");
         }
 
     }
