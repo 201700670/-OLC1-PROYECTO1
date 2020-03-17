@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace _OLC1_PROYECT1.CreandoArbol
 {
-    class Estado
+    class Estado: ICloneable
     {
         //atributos
 
@@ -15,7 +15,10 @@ namespace _OLC1_PROYECT1.CreandoArbol
         private int id;
         //transiciones del estado
         private LinkedList<Trancisiones> transiciones = new LinkedList<Trancisiones>();
-
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
         /**
          *  Constructor
          * @param id identificador

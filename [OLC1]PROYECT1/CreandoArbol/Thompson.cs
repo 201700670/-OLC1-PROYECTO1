@@ -74,10 +74,33 @@ namespace _OLC1_PROYECT1.CreandoArbol
 				}
 				else if (Pila.ElementAt(i).getLexema().Equals("+") && Pila.ElementAt(i).getTipo() == DatoExpresion.TipoExpresion.OPERADOR)
 				{
-					Object elementosacado = pilaAFN.Pop();
+					
+
+
+
+					Automata elementosacado= (Automata)pilaAFN.Pop();
+					
 					pilaAFN.Push(elementosacado);
-					pilaAFN.Push(elementosacado);
-					Automata uno_mas = Uno_mas((Automata)pilaAFN.Pop(), (Automata)pilaAFN.Pop());
+
+					Automata t=new Automata();
+					///////////////////////////CLONAMOS NUESTRA VARIABLE PARA HACER EL DE KLEENE Y LA CONCATENACION
+					foreach(Estado sta in elementosacado.getEstados())
+					{
+						t.addEstados((Estado)sta.Clone());
+					}
+					foreach (Estado sta in elementosacado.getEstadosAceptacion())
+					{
+						t.addEstadosAceptacion((Estado)sta.Clone());
+					}
+					int a = 0;
+					
+					t.setAlfabeto(elementosacado.getAlfabeto());
+					t.setLenguajeR((String)elementosacado.getLenguajeR().Clone());
+					t.setInicial((Estado)elementosacado.getInicial().Clone());
+					t.setEstadoInicial((Estado)elementosacado.getEstadoInicial().Clone());
+					
+					////////////////SE COMIENZA LA ACCION
+					Automata uno_mas = Uno_mas((Automata)pilaAFN.Pop(), t);
 					pilaAFN.Push(uno_mas);
 					this.afn = uno_mas;
 				}
@@ -316,35 +339,58 @@ namespace _OLC1_PROYECT1.CreandoArbol
 				}
 				if(i== AFN1.getEstados().Count() - 1)// el ultimo estado se concatena con el de kleene
 				{
-					i++;
-					Estado inicialkleene = new Estado(i);// estado inicial de kleene
-					AFN_UNOMAS.addEstados(inicialkleene);
-					AFN_UNOMAS.setEstadoInicial(inicialkleene);
 					
 					// creando trancision de estado inicial kleeene y estado aceptacion de  afn1
 					for (int k = 0; k < AFN1.getEstadosAceptacion().Count(); k++)
 					{
 						Trancisiones tran = new Trancisiones();
-						tran.Transicion((Estado)AFN1.getEstadosAceptacion().ElementAt(k), inicialkleene, AnalizadorTexto.AnalizadorTexto.EPSILON);
+						tran.Transicion((Estado)AFN1.getEstadosAceptacion().ElementAt(k), AFN2.getEstadoInicial(), AnalizadorTexto.AnalizadorTexto.EPSILON);
 						tmp.setTransiciones(tran);
 					}
+					Estado nuevoInicio = tmp;
 					//agregar todos los estados intermedio
 					
+					for (int j = 0; j < AFN2.getEstados().Count(); j++)
+					{
+						Estado tmpi = (Estado)AFN2.getEstados().ElementAt(j);
+						tmpi.setId(i+1);
+						AFN_UNOMAS.addEstados(tmpi);
+						if (j == 0)
+						{
+							AFN2.getEstadoInicial().setId(i + 1);
+						}
+						if (AFN2.getEstados().Count() - 1 == j)
+						{
+							AFN2.getEstadosAceptacion().Clear();
+							Console.WriteLine(AFN2.getEstadosAceptacion().Count());
+							tmpi.getTransiciones().Clear();
+							AFN2.addEstadosAceptacion(tmpi);
+							
+						}
+						i++;
+					}
 					//Se crea un nuevo estado de aceptacion
-					/*Estado nuevoFin = new Estado(i + 1);
+					Estado nuevoFin = new Estado(i + 1);
 					AFN_UNOMAS.addEstados(nuevoFin);
 					AFN_UNOMAS.addEstadosAceptacion(nuevoFin);
 					//definir estados clave para realizar la cerraduras
-					Estado anteriorInicio = AFN1.getEstadoInicial();
-					LinkedList<Estado> anteriorFin = AFN1.getEstadosAceptacion();
-
+					Estado anteriorInicio = AFN2.getEstadoInicial();
+					Trancisiones rem= anteriorInicio.getTransiciones().ElementAt(0);
+					LinkedList<Estado> anteriorFin = AFN2.getEstadosAceptacion();
+					//Se agrega el dato de trancisiones de anteriorinicio y anteriorfin
+					String simbolos = rem.getSimbolo();
+					Trancisiones unionafinal = new Trancisiones();
+					unionafinal.Transicion(AFN2.getInicial(), anteriorFin.ElementAt(AFN2.getEstadosAceptacion().Count()-1),simbolos );
+					anteriorInicio.setTransiciones(unionafinal);
+									
+					
 					// agregar transiciones desde el nuevo estado inicial
 					Trancisiones tran1 = new Trancisiones();
-					tran1.Transicion(inicialkleene, anteriorInicio, AnalizadorTexto.AnalizadorTexto.EPSILON);
-					inicialkleene.getTransiciones().AddLast(tran1);
+					tran1.Transicion(nuevoInicio, anteriorInicio, AnalizadorTexto.AnalizadorTexto.EPSILON);
+					nuevoInicio.getTransiciones().AddLast(tran1);
 					Trancisiones tran21 = new Trancisiones();
-					tran21.Transicion(inicialkleene, nuevoFin, AnalizadorTexto.AnalizadorTexto.EPSILON);
-					inicialkleene.getTransiciones().AddLast(tran21);
+					tran21.Transicion(nuevoInicio, nuevoFin, AnalizadorTexto.AnalizadorTexto.EPSILON);
+					nuevoInicio.getTransiciones().AddLast(tran21);
 					// agregar transiciones desde el anterior estado final
 					for (int k = 0; k < anteriorFin.Count(); k++)
 					{
@@ -354,22 +400,11 @@ namespace _OLC1_PROYECT1.CreandoArbol
 						Trancisiones tran4 = new Trancisiones();
 						tran4.Transicion(anteriorFin.ElementAt(k), nuevoFin, AnalizadorTexto.AnalizadorTexto.EPSILON);
 						anteriorFin.ElementAt(k).getTransiciones().AddLast(tran4);
-					}*/
+					}
 
 				}
 				AFN_UNOMAS.addEstados(tmp);
-
 				
-			}
-
-			for (int j = 0; j < temporalmas.getEstados().Count(); j++)
-			{
-				
-				
-				temporalmas.getEstados().ElementAt(j).setId(i);
-				
-				Console.WriteLine(i);
-				i++;
 			}
 
 			AFN_UNOMAS.setAlfabeto(AFN1.getAlfabeto());
@@ -394,11 +429,11 @@ namespace _OLC1_PROYECT1.CreandoArbol
 		}
 
 	}
-
+	
 	/// <summary>
 	/// ///EN ESTE SE CREA UNA CLASE AUTOMATA QUE SE UTILIZARA PARA HACER EL DE THOMPSON
 	/// </summary>
-	class Automata
+	class Automata: ICloneable
 	{
 
 		//es un estado inicial
@@ -423,7 +458,10 @@ namespace _OLC1_PROYECT1.CreandoArbol
 
 		}
 
-
+		public object Clone()
+		{
+			return this.MemberwiseClone();
+		}
 		/**
 		 * Accesor del estado inicial del autómata
 		 * @return Estado
