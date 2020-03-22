@@ -64,6 +64,7 @@
     <Compile Include="AnalizadorTexto\AnalizadorTexto.cs" />
     <Compile Include="AnalizadorTexto\Token.cs" />
     <Compile Include="CreandoArbol\Estado.cs" />
+    <Compile Include="CreandoArbol\Graphviz.cs" />
     <Compile Include="CreandoArbol\Thompson.cs" />
     <Compile Include="CreandoArbol\Trancisiones.cs" />
     <Compile Include="Form1.cs">

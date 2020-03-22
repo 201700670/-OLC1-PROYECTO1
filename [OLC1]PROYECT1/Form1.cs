@@ -9,7 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using _OLC1_PROYECT1.AnalizadorTexto;
-
+using _OLC1_PROYECT1.Listas;
+using _OLC1_PROYECT1.CreandoArbol;
 namespace _OLC1_PROYECT1
 {
     public partial class Form1 : Form
@@ -145,6 +146,24 @@ namespace _OLC1_PROYECT1
             _OLC1_PROYECT1.AnalizadorTexto.AnalizadorTexto lex = new AnalizadorTexto.AnalizadorTexto();
             lex.escanear(texto);
             lex.imprimirLista(lex.salida);
+            foreach(PilaExpresion pilas in lex.Pila)
+            {
+                Console.WriteLine("----------------->        "+pilas.getIdentificador_expresion());
+                Thompson a = new Thompson();
+                Automata graficar= a.Analizarentrada(pilas.getPilita());
+                Graphviz.FileDotEngine.Run1(pilas.getIdentificador_expresion(),crandoautomata(graficar));
+            }
+        }
+        public String crandoautomata(object raiz)
+        {
+            String grafo;
+            String resultado;
+            grafo = "digraph grafica{ \r\n rankdir=LR; size = \"8,5\" \r\n ";
+           
+            
+            resultado = grafo + ((Automata)raiz).DOT_THOMPSON((Automata)raiz)+"}";
+            return resultado;
+
         }
     }
 }

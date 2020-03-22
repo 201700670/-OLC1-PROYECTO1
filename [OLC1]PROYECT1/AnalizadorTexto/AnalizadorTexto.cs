@@ -1029,6 +1029,7 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
             {
                 //HTML_CONJUNTOS conjuntos = new HTML_CONJUNTOS();
                 //conjuntos.HTML_CONJUNTOS(L_Conjuntos);
+                Console.WriteLine("*************************************************************************   "+Pila.Count());
                 return salida;
             }
         }
