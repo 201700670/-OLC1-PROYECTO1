@@ -147,7 +147,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
 			//se agragaran los estados de cada uno de los automatas del lado derecho e izquierdo para luego unirlos por se de
 			// concatencion
 			///////////////SE PROCEDE A EJECUTAR LOS DEL LADO IZQUIERDO
-			Automata SUSTITUTO = new Automata();
+			/*Automata SUSTITUTO = (Automata)AFN2.Clone();
 			foreach(Estado states in AFN2.getEstados())
 			{
 				Estado auxiliares = new Estado(states.getId());
@@ -166,7 +166,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
 			SUSTITUTO.setEstadoInicial(SUSTITUTO.getEstados().ElementAt(0));
 			SUSTITUTO.setInicial(SUSTITUTO.getEstados().ElementAt(0));
 			SUSTITUTO.setLenguajeR(AFN2.getLenguajeR());
-			SUSTITUTO.setAlfabeto(AFN2.getAlfabeto());
+			SUSTITUTO.setAlfabeto(AFN2.getAlfabeto());*/
 			Trancisiones tran = null;
 			for (i = 0; i < AFN1.getEstados().Count(); i++)
 			{
@@ -192,7 +192,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
 					}*/
 					foreach(Estado es in AFN1.getEstadosAceptacion())
 					{
-						tmp = SUSTITUTO.getEstadoInicial();
+						tmp = AFN2.getEstadoInicial();
 						int idestadfin = AFN1.getEstadosAceptacion().ElementAt(0).getId();
 						tmp.setId(idestadfin);
 						int a = 0;
@@ -204,13 +204,13 @@ namespace _OLC1_PROYECT1.CreandoArbol
 			}
 			i--;
 			//// SE PROCEDE A EJECUTAR LO DEL LADO DERECHO
-			for (int j = 0; j < SUSTITUTO.getEstados().Count(); j++)
+			for (int j = 0; j < AFN2.getEstados().Count(); j++)
 			{
-				Estado tmp = (Estado)SUSTITUTO.getEstados().ElementAt(j);
+				Estado tmp = (Estado)AFN2.getEstados().ElementAt(j);
 				tmp.setId(i);
 				
 				//define el ultimo con estado de aceptacion
-				if (SUSTITUTO.getEstados().Count() - 1 == j)
+				if (AFN2.getEstados().Count() - 1 == j)
 					AFN_CONCATENACION.addEstadosAceptacion(tmp);
 				if (j == 0)
 				{
