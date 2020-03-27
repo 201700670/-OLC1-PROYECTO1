@@ -66,7 +66,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
             }
             
             quitarTansicionesVacias(automata);
-            quitarIndeterminismo();
+            //quitarIndeterminismo();
             /*while (!verificarMinimo())
             {
                 minimizar();
