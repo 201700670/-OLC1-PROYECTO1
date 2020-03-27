@@ -51,11 +51,20 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <HintPath>packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -71,15 +80,17 @@
     <Compile Include="AnalizadorTexto\Token.cs" />
     <Compile Include="Construccion_AFD\AFD.cs" />
     <Compile Include="Construccion_AFD\Algoritmo.cs" />
+    <Compile Include="CreandoArbol\AFD_GRAFICA.cs" />
     <Compile Include="CreandoArbol\Estado.cs" />
     <Compile Include="CreandoArbol\Graphviz.cs" />
     <Compile Include="CreandoArbol\Thompson.cs" />
     <Compile Include="CreandoArbol\Trancisiones.cs" />
-    <Compile Include="Elementos\Concatenacion.cs" />
-    <Compile Include="Elementos\Disyuncion.cs" />
+    <Compile Include="CreandoArbol\Transformador.cs" />
+    <Compile Include="Elementos\Concatenacion_punto.cs" />
+    <Compile Include="Elementos\Disyuncion_or.cs" />
     <Compile Include="Elementos\ElementoAutomata.cs" />
     <Compile Include="Elementos\Kleene.cs" />
-    <Compile Include="Elementos\Simple.cs" />
+    <Compile Include="Elementos\Simple_Term.cs" />
     <Compile Include="Elementos\Uno_epsilon.cs" />
     <Compile Include="Elementos\Uno_mas.cs" />
     <Compile Include="Form1.cs">
@@ -91,6 +102,7 @@
     <Compile Include="Listas\DatoExpresion.cs" />
     <Compile Include="Listas\Nodo.cs" />
     <Compile Include="Listas\PilaExpresion.cs" />
+    <Compile Include="PDF\PDF.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -105,6 +117,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include=".editorconfig" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -131,5 +144,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

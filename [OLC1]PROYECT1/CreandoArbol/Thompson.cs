@@ -223,8 +223,8 @@ namespace _OLC1_PROYECT1.CreandoArbol
 				i++;
 			}
 			Hashtable alfabeto = new Hashtable();
-			alfabeto.Add(AFN1.getAlfabeto(), 12);
-			alfabeto.Add(AFN2.getAlfabeto(), 22);
+			alfabeto.Add(AFN1.getAlfabeto(), AFN_CONCATENACION.getInicial().getId());
+			alfabeto.Add(AFN2.getAlfabeto(), AFN_CONCATENACION.getEstadosAceptacion().ElementAt(0).getId());
 			AFN_CONCATENACION.setAlfabeto(alfabeto);
 			AFN_CONCATENACION.setLenguajeR(AFN1.getLenguajeR() + " " + AFN2.getLenguajeR());
 			//Console.WriteLine(tran.toString());

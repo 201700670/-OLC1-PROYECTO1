@@ -11,16 +11,16 @@ using _OLC1_PROYECT1.CreandoArbol;
 
 namespace _OLC1_PROYECT1.Elementos
 {
-    class Concatenacion: Automata
+    class Concatenacion_punto: Automata
     {
         Automata AFN1, AFN2;
         int n1, n2;
-        public Concatenacion(Automata AFN1, Automata AFN2)
+        public Concatenacion_punto(Automata AFN1, Automata AFN2)
         {
             this.AFN1 = AFN1;
             this.AFN2 = AFN2;
         }
-        public override object Ejecutar(int n)
+        /*public override object Ejecutar(int n)
         {
             return null;
         }
@@ -50,7 +50,7 @@ namespace _OLC1_PROYECT1.Elementos
 						tran = new Trancisiones();
 						tran.Transicion((Estado)AFN1.getEstadosAceptacion().ElementAt(k), AFN2.getEstadoInicial(), AnalizadorTexto.AnalizadorTexto.EPSILON);
 						tmp.setTransiciones(tran);
-					}*/
+					}
 					foreach (Estado es in AFN1.getEstadosAceptacion())
 					{
 						tmp = AFN2.getEstadoInicial();
@@ -92,6 +92,6 @@ namespace _OLC1_PROYECT1.Elementos
 			this.setLenguajeR(AFN1.getLenguajeR() + " " + AFN2.getLenguajeR());
 			//Console.WriteLine(tran.toString());
 			return this;
-        }
+        }*/
     }
 }

@@ -7,15 +7,15 @@ using _OLC1_PROYECT1.CreandoArbol;
 
 namespace _OLC1_PROYECT1.Elementos
 {
-    class Simple : Automata
+    class Simple_Term : Automata
     {
         String simple;
         int n1, n2;
-        public Simple(String AFN1)
+        public Simple_Term(String AFN1)
         {
             this.simple = AFN1;
         }
-        public override object Ejecutar(int n)
+        /*public override object Ejecutar(int n)
         {
             return null;
         }
@@ -41,6 +41,6 @@ namespace _OLC1_PROYECT1.Elementos
             this.setLenguajeR(simple + "");
             //Console.WriteLine(tran.DOT_String());
             return this;
-        }
+        }*/
     }
 }

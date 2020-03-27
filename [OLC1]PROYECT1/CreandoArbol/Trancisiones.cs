@@ -7,7 +7,7 @@ using _OLC1_PROYECT1.CreandoArbol;
 
 namespace _OLC1_PROYECT1.CreandoArbol
 {
-    class Trancisiones: ICloneable// la <T> significa que puede ser de cualquier tipo la coleccion o se un int, float, double, etc.
+    class Trancisiones: ICloneable
     {
         //estado inicial de la transicion
         private Estado inicio;

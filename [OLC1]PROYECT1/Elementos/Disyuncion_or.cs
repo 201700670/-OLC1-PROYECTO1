@@ -10,16 +10,16 @@ using System.Collections;
 
 namespace _OLC1_PROYECT1.Elementos
 {
-    class Disyuncion: Automata
+    class Disyuncion_or: Automata
     {
         Automata AFN1, AFN2;
         int n1, n2;
-        public Disyuncion(Automata AFN1, Automata AFN2)
+        public Disyuncion_or(Automata AFN1, Automata AFN2)
         {
             this.AFN1 = AFN1;
             this.AFN2 = AFN2;
         }
-        public override object Ejecutar(int n)
+        /*public override object Ejecutar(int n)
         {
             return null;
         }
@@ -123,6 +123,6 @@ namespace _OLC1_PROYECT1.Elementos
 			this.setAlfabeto(alfabeto);
 			this.setLenguajeR(AFN1.getLenguajeR() + " " + AFN2.getLenguajeR());
 			return this;
-        }
+        }*/
     }
 }

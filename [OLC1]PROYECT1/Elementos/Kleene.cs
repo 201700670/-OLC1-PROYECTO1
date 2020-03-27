@@ -13,7 +13,7 @@ namespace _OLC1_PROYECT1.Elementos
         {
             this.AFN = AFN1;
         }
-        public override object Ejecutar(int n)
+        /*public override object Ejecutar(int n)
         {
             return null;
         }
@@ -80,7 +80,7 @@ namespace _OLC1_PROYECT1.Elementos
 
 
         }
-            
+            */
         
     }
 }

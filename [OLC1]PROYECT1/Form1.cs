@@ -12,6 +12,7 @@ using _OLC1_PROYECT1.AnalizadorTexto;
 using _OLC1_PROYECT1.Listas;
 using _OLC1_PROYECT1.CreandoArbol;
 using _OLC1_PROYECT1.Construccion_AFD;
+using System.Collections;
 namespace _OLC1_PROYECT1
 {
     public partial class Form1 : Form
@@ -152,13 +153,26 @@ namespace _OLC1_PROYECT1
                 Console.WriteLine("----------------->        "+pilas.getIdentificador_expresion());
                 Thompson a = new Thompson();
                 Automata graficar= a.Analizarentrada(pilas.getPilita());
+                
                 Console.WriteLine(graficar);
+                Transformador AFD = new Transformador();
+                AFD.minimizar(graficar);
                 //Algoritmo simularAFD = new Algoritmo(graficar,"");
                 Graphviz.FileDotEngine.Run1(pilas.getIdentificador_expresion(),crandoautomata(graficar));
             }
+            PDF creando = new PDF();
+           
+            if(lex.errores.Count()> 0)
+            {
+                creando.crearPDFErrores(lex.errores);
+            }
+            else
+            {
+                creando.crearPDFLexico(lex.salida);
+            }
         }
         public String crandoautomata(object raiz)
-        {
+        { 
             String grafo;
             String resultado="";
             grafo = "digraph grafica{ \r\n rankdir=LR; size = \"8,5\" \r\n ";

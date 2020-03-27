@@ -15,7 +15,7 @@ namespace _OLC1_PROYECT1.Elementos
         {
             this.simple = AFN1;
         }
-        public override object Ejecutar(int n)
+        /*public override object Ejecutar(int n)
         {
             return null;
         }
@@ -23,13 +23,13 @@ namespace _OLC1_PROYECT1.Elementos
         public override object Estados(int n)
         {
             //// se realiza el simple con el epsilon
-            Automata simple = (Automata)new Simple(AnalizadorTexto.AnalizadorTexto.EPSILON).Estados(0);
+            Automata simple = (Automata)new Simple_Term(AnalizadorTexto.AnalizadorTexto.EPSILON).Estados(0);
             ///// se hace una disyuncion con el dato y epsilon
-            Automata disyuncion =new Disyuncion(this.simple, simple);
+            Automata disyuncion =new Disyuncion_or(this.simple, simple);
 
             //////devuelve la disyuncion
             
             return disyuncion.Estados(0);
-        }
+        }*/
     }
 }

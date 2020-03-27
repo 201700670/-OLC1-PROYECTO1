@@ -257,8 +257,17 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                         }
                         else if (c.Equals(" "))
                         {
-                            columna += 1;
-                            estado = 1;
+                            if (todosentrecorchetes == 2)
+                            {
+                                auxLex += c;
+                                estado = 1;
+                                columna += 1;
+                            }
+                            else
+                            {
+                                columna += 1;
+                                estado = 1;
+                            }
                         }
                         else if (c.Equals("~"))
                         {
@@ -424,6 +433,47 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                                 estado = 0;
                             }
 
+                        }
+                        else if (c.Equals("["))
+                        {
+                            todosentrecorchetes++;
+                            auxLex += c;
+                            addToken(Tipo.CORCHETEIZQ, auxLex, fila, columna);
+                            auxLex = "";
+                            estado = 1;
+                        }
+                        else if (c.Equals(":"))
+                        {
+                            if (todosentrecorchetes == 1)
+                            {
+                                auxLex += c;
+                                addToken(Tipo.CORCHETEIZQ, auxLex, fila, columna);
+                                auxLex = "";
+                                todosentrecorchetes++;
+                                estado = 1;
+                            }
+                            else if (todosentrecorchetes == 2)
+                            {
+                                todosentrecorchetes = 0;
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                auxLex += c;
+                                addToken(Tipo.DOSPUNTOS, auxLex, fila, columna);
+                                auxLex = "";
+                                estado = 1;
+                            }
+                            else
+                            {
+                                auxLex += c;
+                                estado = 1;
+                            }
+                        }
+                        else if (c.Equals("]"))
+                        {
+                            todosentrecorchetes = 0;
+                            auxLex += c;
+                            addToken(Tipo.CORCHETEDER, auxLex, fila, columna);
+                            auxLex = "";
+                            estado = 1;
                         }
                         else
                         {
