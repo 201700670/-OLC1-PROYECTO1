@@ -48,6 +48,9 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.button1 = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -64,7 +67,7 @@
             this.reportesToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1106, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -111,14 +114,16 @@
             // reporteTokensToolStripMenuItem
             // 
             this.reporteTokensToolStripMenuItem.Name = "reporteTokensToolStripMenuItem";
-            this.reporteTokensToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.reporteTokensToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reporteTokensToolStripMenuItem.Text = "Reporte Tokens";
+            this.reporteTokensToolStripMenuItem.Click += new System.EventHandler(this.reporteTokensToolStripMenuItem_Click);
             // 
             // reporteErroresLéxicosToolStripMenuItem
             // 
             this.reporteErroresLéxicosToolStripMenuItem.Name = "reporteErroresLéxicosToolStripMenuItem";
-            this.reporteErroresLéxicosToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.reporteErroresLéxicosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reporteErroresLéxicosToolStripMenuItem.Text = "Guardar Errores";
+            this.reporteErroresLéxicosToolStripMenuItem.Click += new System.EventHandler(this.reporteErroresLéxicosToolStripMenuItem_Click);
             // 
             // reportesToolStripMenuItem
             // 
@@ -131,7 +136,7 @@
             // erroresLéxicosToolStripMenuItem
             // 
             this.erroresLéxicosToolStripMenuItem.Name = "erroresLéxicosToolStripMenuItem";
-            this.erroresLéxicosToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.erroresLéxicosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.erroresLéxicosToolStripMenuItem.Text = "Errores Léxicos";
             // 
             // tabControl2
@@ -233,6 +238,35 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(646, 120);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(176, 30);
+            this.listBox1.TabIndex = 11;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(669, 182);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(108, 17);
+            this.checkBox1.TabIndex = 12;
+            this.checkBox1.Text = "AFN_GRAPHVIZ";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(619, 247);
+            this.textBox4.Multiline = true;
+            this.textBox4.Name = "textBox4";
+            this.textBox4.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox4.Size = new System.Drawing.Size(475, 243);
+            this.textBox4.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -240,7 +274,10 @@
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 517);
+            this.ClientSize = new System.Drawing.Size(1106, 517);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.tabControl1);
@@ -286,6 +323,9 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TextBox textBox4;
     }
 }
 

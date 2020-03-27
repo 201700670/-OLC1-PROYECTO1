@@ -141,94 +141,197 @@ namespace _OLC1_PROYECT1.CreandoArbol
 		///// METODO QUE ES PARA LA CONCATENACION 
 		public Automata Concatenacion(Automata AFN1, Automata AFN2)
 
-		{
-			Automata AFN_CONCATENACION = new Automata();
-			int i = 0;
-			//se agragaran los estados de cada uno de los automatas del lado derecho e izquierdo para luego unirlos por se de
-			// concatencion
-			///////////////SE PROCEDE A EJECUTAR LOS DEL LADO IZQUIERDO
-			/*Automata SUSTITUTO = (Automata)AFN2.Clone();
-			foreach(Estado states in AFN2.getEstados())
+		{Automata AFN_CONCATENACION = new Automata();
+			if (AFN2.getTipo()!=null)
 			{
-				Estado auxiliares = new Estado(states.getId());
-				foreach(Trancisiones trancision in states.getTransiciones())
-				{
-					Trancisiones transi = new Trancisiones();
-					Estado iniciotran = new Estado(trancision.getInicio().getId());
-					Estado fintran = new Estado(trancision.getFin().getId());
-					String simbolotran = trancision.getSimbolo();
-					transi.Transicion(iniciotran, fintran,simbolotran);
-					auxiliares.getTransiciones().AddLast(transi);
-				}
-				SUSTITUTO.addEstados(auxiliares);
-			}
-			SUSTITUTO.addEstadosAceptacion(SUSTITUTO.getEstados().ElementAt(SUSTITUTO.getEstados().Count-1));
-			SUSTITUTO.setEstadoInicial(SUSTITUTO.getEstados().ElementAt(0));
-			SUSTITUTO.setInicial(SUSTITUTO.getEstados().ElementAt(0));
-			SUSTITUTO.setLenguajeR(AFN2.getLenguajeR());
-			SUSTITUTO.setAlfabeto(AFN2.getAlfabeto());*/
-			Trancisiones tran = null;
-			for (i = 0; i < AFN1.getEstados().Count(); i++)
-			{
-				Estado tmp = (Estado)AFN1.getEstados().ElementAt(i);
-				tmp.setId(i);
-				/// ahorita se define el estado inicial
-				if (i == 0)
-				{
-					AFN_CONCATENACION.setEstadoInicial(tmp);
-				}
-				///cuando llega al último, concatena el ultimo con el primero del otro automata con un epsilon
-				if (i == AFN1.getEstados().Count() - 1)
-				{
-
-					//se utiliza un ciclo porque los estados de aceptacion son un array
-					//se coloca un estado de epsilon por si acaso es para hacer la separacion de los nodos
-
-					/*for (int k = 0; k < AFN1.getEstadosAceptacion().Count(); k++)
-					{
-						tran = new Trancisiones();
-						tran.Transicion((Estado)AFN1.getEstadosAceptacion().ElementAt(k), AFN2.getEstadoInicial(), AnalizadorTexto.AnalizadorTexto.EPSILON);
-						tmp.setTransiciones(tran);
-					}*/
-					foreach(Estado es in AFN1.getEstadosAceptacion())
-					{
-						tmp = AFN2.getEstadoInicial();
-						int idestadfin = AFN1.getEstadosAceptacion().ElementAt(0).getId();
-						tmp.setId(idestadfin);
-						int a = 0;
-						
-					}
-				}
-				AFN_CONCATENACION.addEstados(tmp);
-
-			}
-			i--;
-			//// SE PROCEDE A EJECUTAR LO DEL LADO DERECHO
-			for (int j = 0; j < AFN2.getEstados().Count(); j++)
-			{
-				Estado tmp = (Estado)AFN2.getEstados().ElementAt(j);
-				tmp.setId(i);
+				int i = 0;
 				
-				//define el ultimo con estado de aceptacion
-				if (AFN2.getEstados().Count() - 1 == j)
-					AFN_CONCATENACION.addEstadosAceptacion(tmp);
-				if (j == 0)
+				Trancisiones tran = null;
+				for (i = 0; i < AFN1.getEstados().Count(); i++)
 				{
+					Estado tmp = (Estado)AFN1.getEstados().ElementAt(i);
+					tmp.setId(i);
+					/// ahorita se define el estado inicial
+					if (i == 0)
+					{
+						AFN_CONCATENACION.setEstadoInicial(tmp);
+					}
+					///cuando llega al último, concatena el ultimo con el primero del otro automata con un epsilon
+					if (i == AFN1.getEstados().Count() - 1)
+					{
+
+						//se utiliza un ciclo porque los estados de aceptacion son un array
+						//se coloca un estado de epsilon por si acaso es para hacer la separacion de los nodos
+
+						/*for (int k = 0; k < AFN1.getEstadosAceptacion().Count(); k++)
+						{
+							tran = new Trancisiones();
+							
+							tran.Transicion((Estado)AFN1.getEstadosAceptacion().ElementAt(k), AFN2.getEstadoInicial(), AnalizadorTexto.AnalizadorTexto.EPSILON);
+							tmp.setTransiciones(tran);
+						}*/
+						foreach (Estado es in AFN1.getEstadosAceptacion())
+						{
+
+							
+							int idestadfin = AFN1.getEstadosAceptacion().ElementAt(0).getId();
+							tmp.setId(idestadfin);
+							foreach (Trancisiones a in AFN2.getEstadoInicial().getTransiciones())
+							{
+								Trancisiones b = new Trancisiones();
+								int contadorespacios = 0;
+								int inicio = a.getInicio().getId();
+								int fin = a.getFin().getId();
+								if (inicio > fin)
+								{
+									contadorespacios = inicio - fin;
+								}
+								else
+								{
+									contadorespacios = fin - inicio;
+								}
+								Estado inicios = new Estado(idestadfin);
+								b.setInicio(inicios);
+								Estado finales = new Estado(idestadfin + contadorespacios);
+								b.setFin(finales);
+								b.setSimbolo(a.getSimbolo());
+								tmp.setTransiciones(b);
+							}
+
+						}
+
+					}
+					AFN_CONCATENACION.addEstados(tmp);
 
 				}
-				else
+				int inicial = i--;
+				//// SE PROCEDE A EJECUTAR LO DEL LADO DERECHO
+				for (int j = 0; j < AFN2.getEstados().Count(); j++)
 				{
-					AFN_CONCATENACION.addEstados(tmp);
+					Estado tmp = new Estado(i);
+					tmp.setId(i);
+					//define el ultimo con estado de aceptacion
+					if (AFN2.getEstados().Count() - 1 == j)
+					{
+						AFN_CONCATENACION.addEstadosAceptacion(tmp);
+					}
+					else
+					{
+						foreach (Trancisiones a in AFN2.getEstados().ElementAt(j).getTransiciones())
+						{
+							Trancisiones b = new Trancisiones();
+							int contadorespacios = 0;
+							int inicio = a.getInicio().getId();
+							int fin = a.getFin().getId();
+							if (inicio > fin)
+							{
+								contadorespacios = inicio - fin;
+							}
+							else
+							{
+								contadorespacios = fin - inicio;
+							}
+							Estado inicios = new Estado(i);
+							b.setInicio(inicios);
+							Estado finales = new Estado(i + contadorespacios);
+							b.setFin(finales);
+							b.setSimbolo(a.getSimbolo());
+							tmp.setTransiciones(b);
+						}
+					}
+
+					if (j == 0)
+					{
+
+					}
+					else
+					{
+						AFN_CONCATENACION.addEstados(tmp);
+					}
+
+					i++;
 				}
-				i++;
+				Hashtable alfabeto = new Hashtable();
+				alfabeto.Add(AFN1.getAlfabeto(), AFN_CONCATENACION.getInicial().getId());
+				alfabeto.Add(AFN2.getAlfabeto(), AFN_CONCATENACION.getEstadosAceptacion().ElementAt(0).getId());
+				AFN_CONCATENACION.setTipo(null);
+				AFN_CONCATENACION.setAlfabeto(alfabeto);
+				AFN_CONCATENACION.setLenguajeR(AFN1.getLenguajeR() + " " + AFN2.getLenguajeR());
+				//Console.WriteLine(tran.toString());
 			}
-			Hashtable alfabeto = new Hashtable();
-			alfabeto.Add(AFN1.getAlfabeto(), AFN_CONCATENACION.getInicial().getId());
-			alfabeto.Add(AFN2.getAlfabeto(), AFN_CONCATENACION.getEstadosAceptacion().ElementAt(0).getId());
-			AFN_CONCATENACION.setAlfabeto(alfabeto);
-			AFN_CONCATENACION.setLenguajeR(AFN1.getLenguajeR() + " " + AFN2.getLenguajeR());
-			//Console.WriteLine(tran.toString());
+			else {
+
+
+				int i = 0;
+				//se agragaran los estados de cada uno de los automatas del lado derecho e izquierdo para luego unirlos por se de
+				// concatencion
+				///////////////SE PROCEDE A EJECUTAR LOS DEL LADO IZQUIERDO
+
+				 Trancisiones tran = null;
+				for (i = 0; i < AFN1.getEstados().Count(); i++)
+				{
+					Estado tmp = (Estado)AFN1.getEstados().ElementAt(i);
+					tmp.setId(i);
+					/// ahorita se define el estado inicial
+					if (i == 0)
+					{
+						AFN_CONCATENACION.setEstadoInicial(tmp);
+					}
+					///cuando llega al último, concatena el ultimo con el primero del otro automata con un epsilon
+					if (i == AFN1.getEstados().Count() - 1)
+					{
+
+						//se utiliza un ciclo porque los estados de aceptacion son un array
+						//se coloca un estado de epsilon por si acaso es para hacer la separacion de los nodos
+
+						/*for (int k = 0; k < AFN1.getEstadosAceptacion().Count(); k++)
+						{
+							tran = new Trancisiones();
+							tran.Transicion((Estado)AFN1.getEstadosAceptacion().ElementAt(k), AFN2.getEstadoInicial(), AnalizadorTexto.AnalizadorTexto.EPSILON);
+							tmp.setTransiciones(tran);
+						}*/
+						foreach (Estado es in AFN1.getEstadosAceptacion())
+						{
+							tmp = AFN2.getEstadoInicial();
+							int idestadfin = AFN1.getEstadosAceptacion().ElementAt(0).getId();
+							tmp.setId(idestadfin);
+							int a = 0;
+
+						}
+					}
+					AFN_CONCATENACION.addEstados(tmp);
+
+				}
+				i--;
+				//// SE PROCEDE A EJECUTAR LO DEL LADO DERECHO
+				for (int j = 0; j < AFN2.getEstados().Count(); j++)
+				{
+					Estado tmp = (Estado)AFN2.getEstados().ElementAt(j);
+					tmp.setId(i);
+
+					//define el ultimo con estado de aceptacion
+					if (AFN2.getEstados().Count() - 1 == j)
+						AFN_CONCATENACION.addEstadosAceptacion(tmp);
+					if (j == 0)
+					{
+
+					}
+					else
+					{
+						AFN_CONCATENACION.addEstados(tmp);
+					}
+					i++;
+				}
+
+				Hashtable alfabeto = new Hashtable();
+				alfabeto.Add(AFN1.getAlfabeto(), AFN_CONCATENACION.getInicial().getId());
+				alfabeto.Add(AFN2.getAlfabeto(), AFN_CONCATENACION.getEstadosAceptacion().ElementAt(0).getId());
+				AFN_CONCATENACION.setAlfabeto(alfabeto);
+				AFN_CONCATENACION.setLenguajeR(AFN1.getLenguajeR() + " " + AFN2.getLenguajeR());
+				//Console.WriteLine(tran.toString());
+			}
 			return AFN_CONCATENACION;
+			
 		}
 		////////////////////////////////////////////////CERRADURA DE KLEENE////////////////////////////////////////////////////
 		public Automata CerraduraKleene(Automata automataFN)
@@ -577,7 +680,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
 				
 				
 			*/
-			
+			NUEVOCAMBIO.setTipo("AFN_UNOMAS");
 			NUEVOCAMBIO.addEstadosAceptacion(AFN_UNOMAS.getEstadosAceptacion().ElementAt(0));
 			NUEVOCAMBIO.setEstadoInicial(NUEVOCAMBIO.getEstados().ElementAt(0));
 			NUEVOCAMBIO.setInicial(NUEVOCAMBIO.getEstados().ElementAt(0));

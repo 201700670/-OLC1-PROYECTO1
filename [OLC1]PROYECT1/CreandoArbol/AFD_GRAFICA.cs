@@ -33,7 +33,7 @@ namespace _OLC1_PROYECT1.CreandoArbol
                     tabla2 += "\t" + key;
                 }
             }
-            tabla2 += "\n";     
+            tabla2 += "\n"+"\n";     
             LinkedList<int> table = new LinkedList<int>();
             table.AddLast(0);
             for (int i = 0; i < tabtrans.GetLength(0); i++)
@@ -64,12 +64,22 @@ namespace _OLC1_PROYECT1.CreandoArbol
                     if (j == 0)
                     {
                         
-                        tabla2 = tabla2 + i + "\t" + (tabtrans[i,j].ToString());
+                        tabla2 = tabla2 + i + "\t" ;
+                        foreach(int a in tabtrans[i, j])
+                        {
+                            //Console.WriteLine("888***********************************---------------->        " + a);
+                            tabla2 += a+"\t";
+                        }
                     }
                     else
                     {
 
-                        tabla2 = tabla2 + (tabtrans[i,j].ToString());
+                        
+                        foreach (int a in tabtrans[i, j])
+                        {
+                            //Console.WriteLine("888***********************************---------------->        " + a);
+                            tabla2 += a + "\t";
+                        }
                     }
                 }
                 tabla2 = tabla2 + "\n";

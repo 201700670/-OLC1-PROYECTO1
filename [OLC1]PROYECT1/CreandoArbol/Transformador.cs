@@ -385,9 +385,9 @@ namespace _OLC1_PROYECT1.CreandoArbol
                                                 {
                                                     break;
                                                 }
-                                            }
+                                            }contador++;
                                         }
-                                        contador++;
+                                        
                                     }
                                 if (clau2.ElementAt(contaa).Count() > 1)
                                 {
@@ -497,9 +497,9 @@ namespace _OLC1_PROYECT1.CreandoArbol
                         {
                             break;
                         }
-                    }
+                    }contador++;
                 }
-                contador++;
+                
             }
             Console.WriteLine(tabtrans[q0,contador]);
            return tabtrans[q0,contador];

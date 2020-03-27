@@ -23,13 +23,13 @@ namespace _OLC1_PROYECT1
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
+            /*Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+            */
 
 
-
-            /*Automata nuevo = new Automata();
+            Automata nuevo = new Automata();
             Estado S0 = new Estado(0);
             Estado S1 = new Estado(1);
             Estado S2 = new Estado(2);
@@ -100,7 +100,7 @@ namespace _OLC1_PROYECT1
             Transformador AFD = new Transformador();
             AFD_GRAFICA automata = (AFD_GRAFICA)AFD.minimizar(nuevo);
             automata.CreandoTabla();
-            String tabla2 = "";*/
+            String tabla2 = "";
            
 
             ///er1 -> . {letra} *|{letra} |  {digito} "_";

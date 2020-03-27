@@ -13,6 +13,8 @@ using _OLC1_PROYECT1.Listas;
 using _OLC1_PROYECT1.CreandoArbol;
 using _OLC1_PROYECT1.Construccion_AFD;
 using System.Collections;
+using System.Diagnostics;
+
 namespace _OLC1_PROYECT1
 {
     public partial class Form1 : Form
@@ -20,6 +22,7 @@ namespace _OLC1_PROYECT1
         TextBox creado;
         TabPage tabulador;
         String path;
+        public String Nombreselectindex = "";
         List<string> parts = new List<string>();
         public Form1()
         {
@@ -155,10 +158,16 @@ namespace _OLC1_PROYECT1
                 Automata graficar= a.Analizarentrada(pilas.getPilita());
                 
                 Console.WriteLine(graficar);
+                Hashtable alfabeto = graficar.getAlfabeto();
+                alfabeto.Add(AnalizadorTexto.AnalizadorTexto.EPSILON, 145);
+                graficar.setAlfabeto(alfabeto);
                 Transformador AFD = new Transformador();
-                AFD.minimizar(graficar);
+                AFD_GRAFICA automata = (AFD_GRAFICA)AFD.minimizar(graficar);
+                textBox4.Text=automata.CreandoTabla();
+                //AFD.minimizar(graficar);
                 //Algoritmo simularAFD = new Algoritmo(graficar,"");
                 Graphviz.FileDotEngine.Run1(pilas.getIdentificador_expresion(),crandoautomata(graficar));
+                listBox1.Items.Add(pilas.getIdentificador_expresion());
             }
             PDF creando = new PDF();
            
@@ -181,6 +190,31 @@ namespace _OLC1_PROYECT1
             resultado = grafo + ((Automata)raiz).DOT_THOMPSON((Automata)raiz)+"}";
             return resultado;
 
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int i = listBox1.SelectedIndex;
+            Console.WriteLine(listBox1.Items[i].ToString());
+            Nombreselectindex = listBox1.Items[i].ToString();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            string pdfPath = Path.Combine(Application.StartupPath, Nombreselectindex.Trim()+ ".jpg");
+            Process.Start(pdfPath);
+        }
+
+        private void reporteTokensToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string pdfPath = Path.Combine(Application.StartupPath, "REPORTE_LEXICO.pdf");
+            Process.Start(pdfPath);
+        }
+
+        private void reporteErroresLéxicosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string pdfPath = Path.Combine(Application.StartupPath, "REPORTE_ERRORES.pdf");
+            Process.Start(pdfPath);
         }
     }
 }

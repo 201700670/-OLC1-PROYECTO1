@@ -660,8 +660,15 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                                 flagcad = false;
                                 contador = 0;
                             }
+                            
                             if (contador == 2)
                             {
+                                if (auxLex.Equals("")&& c.Equals("\""))
+                                {
+                                    Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                    //CadenasExpresion.add(auxLex);
+                                    addToken(Tipo.CADENA, auxLex, fila, columna);
+                                }
                                 flagcad = false;
                                 contador = 0;
                             }
@@ -884,6 +891,19 @@ namespace _OLC1_PROYECT1.AnalizadorTexto
                             addToken(Tipo.CORCHETEDER, auxLex, fila, columna);
                             auxLex = "";
                             estado = 2;
+                        }
+                        else if (c.Equals(""))
+                        {
+                            auxLex += c;
+                            if (flagcad)
+                            {
+                                Expresion.AddLast(new DatoExpresion(auxLex, DatoExpresion.TipoExpresion.CADENA, "cadena" + i));
+                                //CadenasExpresion.add(auxLex);
+                                addToken(Tipo.CADENA, auxLex, fila, columna);
+                                flagcad = false;
+                                auxLex = "";
+                                estado = 2;
+                            }
                         }
                         else
                         {
